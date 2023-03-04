@@ -1,11 +1,20 @@
 import React from "react";
-const AnswerCard = ({answer}) => 
+const AnswerCard = ({answer,pickAnswer,correctAnswer,pickedAnswer}) => 
 {
     <div>answer</div>
+    const isRightAnswer = pickedAnswer && answer === correctAnswer;
+    const isWrongAnswer = pickedAnswer && answer === pickedAnswer && pickedAnswer !== correctAnswer;
+    const correctClass = isRightAnswer ? 'correct-answer' : ''; 
+    const wrongClass = isWrongAnswer ? 'incorrect-answer' : '';
+    const disabledClass = pickedAnswer && 'disabled-answer'
     return (
-        <div>{answer}</div>
+        <div className={`quiz-answer ${correctClass} ${wrongClass} ${disabledClass}`} onClick={() => pickAnswer(answer)}>
+            {answer}
+        </div>
     )
 }
 export default AnswerCard;
+
+
 
 

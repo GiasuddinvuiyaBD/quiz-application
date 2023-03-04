@@ -6,7 +6,11 @@ const QuestionCard = (
         currentAnswer,
         querentQuestionIndex,
         quizzes,
-        navigateNext
+        navigateNext,
+        pickAnswer,
+        correctAnswer,
+        pickedAnswer
+        
     }) => 
 {
     return(
@@ -17,7 +21,13 @@ const QuestionCard = (
             <h3>{quize.question}</h3>
             {currentAnswer.map((answer,i) => 
             {
-              return <AnswerCard key={i}  answer={answer} />
+              return <AnswerCard 
+                key={i}  
+                answer={answer} 
+                pickAnswer={pickAnswer}
+                correctAnswer={correctAnswer}
+                pickedAnswer={pickedAnswer}
+               />
             })}
             <button onClick={navigateNext}>Next</button>
         </div>

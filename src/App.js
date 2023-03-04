@@ -1,6 +1,9 @@
 import  {useState} from 'react';
 import QuestionCard from './QuestionCard';
-import Suffle from './uitilize'
+import Suffle from './uitilize';
+import ScoreCard from './ScoreCard';
+import './index.css';
+
 
 function App() {
   // getting and seeting api request
@@ -10,7 +13,34 @@ function App() {
   const [currentAnswer,setCurrentAnswerrs] = useState(null)
   const [endGame,setEndGame] = useState(false)
   const [querentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  
+  const [totalScore,setTotalScore] = useState(0); 
+  const [correctAnswer,setCorrectAnswer] = useState(null);
+  const [pickedAnswer,setPickedAnswer] = useState(null);
+
+  // reset quize function start here 
+  const resetQuiz = () => 
+  {
+    setQuizzes(null);
+    setLoaded(false);
+    setStartQuize(false);
+    setCurrentAnswerrs(false);
+    setEndGame(false);
+    setTotalScore(0);
+    setCorrectAnswer(null);
+    setPickedAnswer(null);
+    setCurrentQuestionIndex(0)
+  }
+  // picking answer function
+  function pickAnswer(answer)
+  {
+    // right now i am working for pickedAnswer
+    setPickedAnswer(answer)
+    if(answer === correctAnswer)
+    {
+      setTotalScore((prevScore) => prevScore + 1)
+    }
+  }
+
   const navigateNext = () => 
   {
     const currentQuizeIndex = querentQuestionIndex + 1; 
@@ -21,6 +51,10 @@ function App() {
       setCurrentQuestionIndex(currentQuizeIndex);
       const question = quizzes[currentQuizeIndex];
       setCurrentAnswerrs(Suffle(question)); 
+      // setting corrent answer on question navigation
+      setCorrectAnswer(question.correct_answer)
+      // reset pickedAnswer
+      setPickedAnswer(null);
     }else{
       setEndGame(true)
     }
@@ -39,27 +73,30 @@ function App() {
      */ 
       setCurrentAnswerrs(Suffle(initialQuestionIndex)); 
       setLoaded(true)
+      // setting passing correct answer
+      setCorrectAnswer(initialQuestionIndex.correct_answer)
       // when i will get result those time i will return startQuize
       setStartQuize(true);
-  } 
+  };
 
   return (
     <>
       <div className='App'>
-        {endGame && <p>Its time to show result</p>}
+        {endGame && <ScoreCard totalScore={totalScore} resetQuiz={resetQuiz} />}
           {/* when our start quize will be stop those time we will return stop button */}
-          {!startQuize && <button onClick={fetchFun}>Start Quize</button>}
-          
+          {!startQuize && <button onClick={fetchFun} style={{display: 'block',margin: '200px auto'}}>Start Quize</button>}
           <div className='container'>
             {/* It means when our loaded will be true those time it will work */}
             {loaded && !endGame && (<QuestionCard 
+            pickAnswer={pickAnswer}
             quize={quizzes[querentQuestionIndex]} 
             currentAnswer={currentAnswer}
             querentQuestionIndex={querentQuestionIndex}
             quizzes={quizzes}
+            correctAnswer={correctAnswer}
+            pickedAnswer={pickedAnswer}
             navigateNext={navigateNext}
-            />)}
-
+            />)};
           </div>
       </div>
     </>
